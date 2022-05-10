@@ -1,0 +1,8 @@
+{
+  "pipeline": [
+    {
+      "type": "readers.las",
+      "filename": "CG1-8A_highpreci_group1_densified_point_cloud.las"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "pipeline": [
+    {
+      "type": "readers.las",
+      "filename": "CG1-8A_highpreci_group1_densified_point_cloud.las"
+    },
+    {
+      "type": "filters.assign",
+      "assignment": "NumberOfReturns[:]=1"
+    },
+    {
+      "type": "filters.assign",
+      "assignment": "ReturnNumber[:]=1"
+    },
+    {
+      "type": "filters.elm"
+    },
+    {
+      "type": "filters.outlier"
+    },
+    {
+      "type": "filters.smrf",
+      "ignore": "Classification[7:7]",
+      "slope": 0.05,
+      "window": 17,
+      "threshold": 0.35,
+      "scalar": 0.9,
+      "cell": 0.4
+    },
+    {
+      "type": "writers.gdal",
+      "filename": "2dsm/saving_test.tiff",
+      "gdaldriver": "GTiff",
+      "output_type": "mean",
+      "resolution": "0.005"
+    },
+    {
+      "type": "filters.range",
+      "limits": "Classification[2:2]"
+    },
+    {
+      "type": "writers.gdal",
+      "filename": "3dem/saving_test.tiff",
+      "gdaldriver": "GTiff",
+      "output_type": "mean",
+      "resolution": "0.005",
+      "bounds": "([486366.076, 486406.222],[6761716.089,6761766.853])"
+    }
+  ]
+}
