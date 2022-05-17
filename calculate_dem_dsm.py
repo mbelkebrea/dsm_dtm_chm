@@ -4,13 +4,17 @@ import os
 import re
 import os
 
-# Check if inputs folder exists, if not raise exception.
-
+# ------------------------------------------------------------------------------
+# Setting up inputs and outputs folders and loading .las files
+# ------------------------------------------------------------------------------
+# INPUTS FOLDER
+# Check if inputs folder exists in working directory, if not raise exception.
 if not os.path.isdir("inputs"):
     raise Exception("No 'inputs' folder found."
     " Please create an 'inputs' folder in the current working directory and add the .las files that are to be processed."
     " Current working directory: %s" % os.getcwd())
 
+# OUTPUTS FOLDER
 # Check if output folders exist, if not they are created.
 f_list = ["output_dsm", "output_dem"]
 for f in f_list:
@@ -20,6 +24,7 @@ for f in f_list:
     else:
         print(f, "folder exists.")
 
+# LAS FILES
 # Read las files from inputs folder that should be converted into dem and dsm.
 # Raise exception if no .las files in inputs folder.
 path = "inputs"
@@ -33,6 +38,9 @@ if len(las_file_list) == 0:
     raise Exception("'inputs' folder contains no files with ending .las."
     " Please add to 'inputs' folder .las files that are to be processed.")
 
+# ------------------------------------------------------------------------------
+# Run pdal pipeline 'get_missionbounds' to get mission boundaries
+# ------------------------------------------------------------------------------
 # open json file with the pipeline that holds all the stages (processes)
 # that should be applied to the las files via pdal
 json_filename = "get_missionbounds"
@@ -44,7 +52,7 @@ with open ("%s.json" % json_filename, "r") as read_file:
     bounds = []
     for file in las_file_list:
         # update the input and output filename in the pipeline and rewrite it as json file
-        filter_dict["pipeline"][0]["filename"] = "1point_clouds/input_part/%s" % file
+        filter_dict["pipeline"][0]["filename"] = "inputs/%s" % file
         json_format = json.dumps(filter_dict, indent=4)
 
         # pass the json file to the pdal pipeline and process the las files
@@ -66,6 +74,9 @@ with open ("%s.json" % json_filename, "r") as read_file:
         bounds.append(bound)
         print(bounds)
 
+# ------------------------------------------------------------------------------
+# Run pdal pipeline 'ground_filter' to perform ground filtering
+# ------------------------------------------------------------------------------
 # open json file with the pipeline that holds all the stages (processes)
 # that should be applied to the las files via pdal
 json_filename = "ground_filter"
@@ -77,7 +88,7 @@ with open ("%s.json" % json_filename, "r") as read_file:
         # update the input and output filename in the pipeline and rewrite it as json file
 
         # reading pointcloud file
-        filter_dict["pipeline"][0]["filename"] = "1point_clouds/input_part/%s" % file
+        filter_dict["pipeline"][0]["filename"] = "inputs/%s" % file
         # setting parameters for morphological filter (smrf)
         filter_dict["pipeline"][5]["slope"] = 0.05
         filter_dict["pipeline"][5]["window"] = 17
@@ -85,18 +96,18 @@ with open ("%s.json" % json_filename, "r") as read_file:
         filter_dict["pipeline"][5]["scalar"] = 0.9
         filter_dict["pipeline"][5]["cell"] = 0.4
         #writitng dsm.tif
-        filter_dict["pipeline"][6]["filename"] = "2dsm/%s2_pdal_dsm.tiff" % file[:16]
+        filter_dict["pipeline"][6]["filename"] = "outputs_dsm/%s2_pdal_dsm.tiff" % file[:16]
         filter_dict["pipeline"][6]["output_type"] = "mean"
         filter_dict["pipeline"][6]["resolution"] = "0.05"
         # writing dem.tif
         print(file[:16])
-        filter_dict["pipeline"][8]["filename"] = "3dem/%s2_pdal_dem.tiff" % file[:16]
+        filter_dict["pipeline"][8]["filename"] = "outputs_dem/%s2_pdal_dem.tiff" % file[:16]
         filter_dict["pipeline"][8]["output_type"] = "mean"
         filter_dict["pipeline"][8]["resolution"] = "0.05"
         filter_dict["pipeline"][8]["bounds"] = bounds[i]
 
-        print("bound pipeline 2: ")
-        print(bounds[i])
+        # print("bound pipeline 2: ")
+        # print(bounds[i])
 
         # transform dictionary to json file to pass it to the pdal pipeline
         json_format = json.dumps(filter_dict, indent=4)
