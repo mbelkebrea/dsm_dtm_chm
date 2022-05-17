@@ -6,8 +6,6 @@ import os
 
 # check if output folders exist, if not they are created.
 
-print(os.getcwd())
-
 if not os.path.isdir("inputs"):
     raise Exception("No 'inputs' folder found."
     " Please create an 'inputs' folder in the current working directory and add the .las files that are to be processed."
