@@ -4,13 +4,14 @@ import os
 import re
 import os
 
-# check if output folders exist, if not they are created.
+# Check if inputs folder exists, if not raise exception.
 
 if not os.path.isdir("inputs"):
     raise Exception("No 'inputs' folder found."
     " Please create an 'inputs' folder in the current working directory and add the .las files that are to be processed."
     " Current working directory: %s" % os.getcwd())
 
+# Check if output folders exist, if not they are created.
 f_list = ["output_dsm", "output_dem"]
 for f in f_list:
     if not os.path.isdir(f):
@@ -19,7 +20,8 @@ for f in f_list:
     else:
         print(f, "folder exists.")
 
-# read las files in inputs folder that should be converted into dem
+# Read las files from inputs folder that should be converted into dem and dsm.
+# Raise exception if no .las files in inputs folder.
 path = "inputs"
 las_file_list = []
 for f in os.listdir(path):
