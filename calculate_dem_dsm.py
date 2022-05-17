@@ -3,7 +3,7 @@ import json
 import os
 import re
 import os
-
+# TEST
 # ------------------------------------------------------------------------------
 # Setting up inputs and outputs folders and loading .las files
 # ------------------------------------------------------------------------------
