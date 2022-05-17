@@ -3,15 +3,35 @@ import json
 import os
 import re
 import os
+
+# check if output folders exist, if not they are created.
+
 print(os.getcwd())
 
-# file list of las files that should be converted into dem
-path = "1point_clouds/input_part"
+if not os.path.isdir("inputs"):
+    raise Exception("No 'inputs' folder found."
+    " Please create an 'inputs' folder in the current working directory and add the .las files that are to be processed."
+    " Current working directory: %s" % os.getcwd())
+
+f_list = ["output_dsm", "output_dem"]
+for f in f_list:
+    if not os.path.isdir(f):
+        os.makedirs(f)
+        print("created folder: ", f)
+    else:
+        print(f, "folder exists.")
+
+# read las files in inputs folder that should be converted into dem
+path = "inputs"
 las_file_list = []
 for f in os.listdir(path):
     if f.endswith(".las"):
         las_file_list.append(f)
 print(las_file_list)
+
+if len(las_file_list) == 0:
+    raise Exception("'inputs' folder contains no files with ending .las."
+    " Please add to 'inputs' folder .las files that are to be processed.")
 
 # open json file with the pipeline that holds all the stages (processes)
 # that should be applied to the las files via pdal
