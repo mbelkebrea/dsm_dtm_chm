@@ -2,7 +2,7 @@
 
 Small program that uses pdal in python to convert 3D point clouds to dsm and dem raster files with the same mission boundaries and row/column count.
 
-Installation
+## Installation
 Download and save in a project directory the files calculate_dsm_dem.py, ground_filter.json, missionbounds.json and requirements_pdal_env.txt. 
 Important: all files need to be in the same directory.
 
@@ -13,7 +13,7 @@ To create a new envrionment use either conda or virtual envrionment and pip:
 1) conda create --name <env> --file requirements_pdal_env.txt
 2) create and switch to a new virtual environment, then do pip install -r requirements_pdal_env.txt
 
-Usage
+## Usage
 The program expects to find the following files and folder structure in the active working directory:
   \inputs
   \outputs_dsm
