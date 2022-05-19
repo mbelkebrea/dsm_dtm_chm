@@ -7,10 +7,10 @@ Download and save in a project directory the files calculate_dsm_dem.py, ground_
 Important: all files need to be in the same directory.
 
 Package requirements for calculate_dsm_dem.py are listed in the requirements_pdal_env.txt file. 
-The easiest way to run calculate_dsm_dem.py is to firest create a new python environment using the requirements_pdal_env.txt file. 
+The easiest way to run calculate_dsm_dem.py is to first create a new python environment using the requirements_pdal_env.txt file. 
 To create a new environment navigate to the directory containing the requirements_pdal_env.txt and use either conda or virtual envrionment and pip:
 
-1) _conda create --name new_env_name --file requirements_pdal_env.txt_
+1) _conda create --name new_env_name --file requirements_pdal_env.txt_, or
 2) create and switch to a new virtual environment, then do _pip install -r requirements_pdal_env.txt_
 
 ## Usage
